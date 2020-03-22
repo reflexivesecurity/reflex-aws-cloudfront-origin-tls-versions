@@ -1,5 +1,6 @@
 # reflex-aws-cloudfront-origin-tls-versions
-TODO: Write a brief description of your rule and what it does.
+
+Reflex rule to enforce minimum Cloudfront origin tls version
 
 ## Usage
 To use this rule either add it to your `reflex.yaml` configuration file:  

@@ -1,10 +1,46 @@
 module "reflex_aws_cloudfront_origin_tls_versions" {
   source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.4"
   rule_name        = "CloudfrontOriginTlsVersions"
-  rule_description = "TODO: Provide rule description"
+  rule_description = "Reflex rule to enforce minimum Cloudfront origin tls version"
 
   event_pattern = <<PATTERN
-# TODO: Provide event pattern
+{
+  "source": [
+    "aws.cloudfront"
+  ],
+  "detail-type": [
+    "AWS API Call via CloudTrail"
+  ],
+  "detail": {
+    "eventSource": [
+      "cloudfront.amazonaws.com"
+    ],
+    "eventName": [
+      "UpdateDistribution",
+      "CreateDistribution"
+    ],
+    "responseElements": {
+      "distribution": {
+        "distributionConfig": {
+          "origins":{
+            "items":[
+              {
+                "customOriginConfig": {
+                  "originSslProtocols": {
+                    "items": [
+                      "TLSv1",
+                      "SSLv3"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
 PATTERN
 
   function_name   = "CloudfrontOriginTlsVersions"

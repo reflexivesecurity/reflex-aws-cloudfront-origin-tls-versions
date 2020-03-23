@@ -51,9 +51,9 @@ PATTERN
     SNS_TOPIC = var.sns_topic_arn,
     MODE      = var.mode
   }
-  custom_lambda_policy = <<EOF
-# TODO: Provide required lambda permissions policy
-EOF
+#   custom_lambda_policy = <<EOF
+# # TODO: Provide required lambda permissions policy
+# EOF
 
 
 

@@ -18,27 +18,7 @@ module "reflex_aws_cloudfront_origin_tls_versions" {
     "eventName": [
       "UpdateDistribution",
       "CreateDistribution"
-    ],
-    "responseElements": {
-      "distribution": {
-        "distributionConfig": {
-          "origins":{
-            "items":[
-              {
-                "customOriginConfig": {
-                  "originSslProtocols": {
-                    "items": [
-                      "TLSv1",
-                      "SSLv3"
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
+    ]
   }
 }
 PATTERN

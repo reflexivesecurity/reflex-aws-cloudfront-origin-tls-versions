@@ -1,10 +1,26 @@
 module "reflex_aws_cloudfront_origin_tls_versions" {
   source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.4"
   rule_name        = "CloudfrontOriginTlsVersions"
-  rule_description = "TODO: Provide rule description"
+  rule_description = "Reflex rule to enforce minimum Cloudfront origin tls version"
 
   event_pattern = <<PATTERN
-# TODO: Provide event pattern
+{
+  "source": [
+    "aws.cloudfront"
+  ],
+  "detail-type": [
+    "AWS API Call via CloudTrail"
+  ],
+  "detail": {
+    "eventSource": [
+      "cloudfront.amazonaws.com"
+    ],
+    "eventName": [
+      "UpdateDistribution",
+      "CreateDistribution"
+    ]
+  }
+}
 PATTERN
 
   function_name   = "CloudfrontOriginTlsVersions"
@@ -12,12 +28,11 @@ PATTERN
   handler         = "reflex_aws_cloudfront_origin_tls_versions.lambda_handler"
   lambda_runtime  = "python3.7"
   environment_variable_map = {
-    SNS_TOPIC = var.sns_topic_arn,
-    MODE      = var.mode
+    SNS_TOPIC = var.sns_topic_arn
   }
-  custom_lambda_policy = <<EOF
-# TODO: Provide required lambda permissions policy
-EOF
+  #   custom_lambda_policy = <<EOF
+  # # TODO: Provide required lambda permissions policy
+  # EOF
 
 
 

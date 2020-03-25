@@ -30,9 +30,9 @@ PATTERN
   environment_variable_map = {
     SNS_TOPIC = var.sns_topic_arn
   }
-#   custom_lambda_policy = <<EOF
-# # TODO: Provide required lambda permissions policy
-# EOF
+  #   custom_lambda_policy = <<EOF
+  # # TODO: Provide required lambda permissions policy
+  # EOF
 
 
 

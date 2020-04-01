@@ -25,9 +25,6 @@ class CloudfrontOriginTlsVersions(AWSRule):
         "TLSv1",
         "SSLv3",
     ]
-    # TODO: Instantiate whatever boto3 client you'll need, if any.
-    # Example:
-    # client = boto3.client("logs")
 
     def __init__(self, event):
         super().__init__(event)
@@ -46,15 +43,6 @@ class CloudfrontOriginTlsVersions(AWSRule):
         Return True if it is compliant, and False if it is not.
         """
         return bool([] == self.non_compliant_resources)
-
-    def remediate(self):
-        """
-        Fix the non-compliant resource so it conforms to the rule
-        """
-        # TODO (Optional): Fix the non-compliant resource. This only needs to
-        # be implemented for rules that remediate non-compliant resources.
-        # Purely detective rules can omit this function.
-        pass
 
     def get_remediation_message(self):
         """ Returns a message about the remediation action that occurred """

@@ -1,5 +1,5 @@
 module "reflex_aws_cloudfront_origin_tls_versions" {
-  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.4"
+  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.7"
   rule_name        = "CloudfrontOriginTlsVersions"
   rule_description = "Reflex rule to enforce minimum Cloudfront origin tls version"
 

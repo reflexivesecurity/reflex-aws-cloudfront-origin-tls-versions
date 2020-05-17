@@ -1,7 +1,7 @@
 module "cwe" {
   source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe?ref=v0.6.0"
-  rule_name        = "CloudfrontOriginTlsVersions"
-  rule_description = "Reflex rule to enforce minimum Cloudfront origin tls version"
+  name        = "CloudfrontOriginTlsVersions"
+  description = "Reflex rule to enforce minimum Cloudfront origin tls version"
 
   event_pattern = <<PATTERN
 {

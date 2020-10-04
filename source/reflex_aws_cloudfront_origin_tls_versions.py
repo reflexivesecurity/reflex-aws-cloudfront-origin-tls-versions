@@ -4,13 +4,14 @@ import json
 import os
 
 import boto3
-from reflex_core import AWSRule
+from reflex_core import AWSRule, subscription_confirmation
 
 
 class CloudfrontOriginTlsVersions(AWSRule):
     """
     Reflex rule to enforce minimum Cloudfront origin tls version
     """
+
     origin_protocol_versions = [
         "TLSv1.2",
         "TLSv1.1",
@@ -32,9 +33,13 @@ class CloudfrontOriginTlsVersions(AWSRule):
     def extract_event_data(self, event):
         """ Extract required event data """
         self.distribution_id = event["detail"]["responseElements"]["distribution"]["id"]
-        self.origins = event["detail"]["responseElements"]["distribution"]["distributionConfig"]["origins"]
+        self.origins = event["detail"]["responseElements"]["distribution"][
+            "distributionConfig"
+        ]["origins"]
         self.non_compliant_resources = self.get_tls_versions_from_origins(self.origins)
-        self.non_compliant_resources_str = self.convert_origins_string(self.non_compliant_resources)
+        self.non_compliant_resources_str = self.convert_origins_string(
+            self.non_compliant_resources
+        )
 
     def resource_compliant(self):
         """
@@ -69,7 +74,11 @@ class CloudfrontOriginTlsVersions(AWSRule):
 
         for origin in origin_items:
             origin_id = origin.get("id", None)
-            origin_tls_versions = origin.get("customOriginConfig", {}).get("originSslProtocols", {}).get("items", [])
+            origin_tls_versions = (
+                origin.get("customOriginConfig", {})
+                .get("originSslProtocols", {})
+                .get("items", [])
+            )
             versions = []
 
             for version in origin_tls_versions:
@@ -77,25 +86,27 @@ class CloudfrontOriginTlsVersions(AWSRule):
                     versions.append(version)
 
             if versions:
-                invalid_origin = {
-                    "id": origin_id,
-                    "originSslProtocols": versions
-                }
+                invalid_origin = {"id": origin_id, "originSslProtocols": versions}
                 invalid_tls_versions.append(invalid_origin)
         return invalid_tls_versions
-
 
     @staticmethod
     def convert_origins_string(origins):
         origins_string = "Origins: "
 
         for origin in origins:
-            origins_string += " id: "+str(origin.get("id",""))
-            origins_string += " "+"".join(origin.get("originSslProtocols",""))
+            origins_string += " id: " + str(origin.get("id", ""))
+            origins_string += " " + "".join(origin.get("originSslProtocols", ""))
 
         return origins_string
 
+
 def lambda_handler(event, _):
     """ Handles the incoming event """
-    rule = CloudfrontOriginTlsVersions(json.loads(event["Records"][0]["body"]))
+    print(event)
+    event_payload = json.loads(event["Records"][0]["body"])
+    if subscription_confirmation.is_subscription_confirmation(event_payload):
+        subscription_confirmation.confirm_subscription(event_payload)
+        return
+    rule = CloudfrontOriginTlsVersions(event_payload)
     rule.run_compliance_rule()
